@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Apply Now - True Move Immigration</title>
+    <link href="https://images.unsplash.com" rel="preconnect" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="news-bar">
+        <div class="news-label">Breaking News</div>
+        <marquee>Canada latest draw issued new PR invitations • Book free immigration consultation today • Study Visa
+            and Work Permit applications open</marquee>
+    </div>
+    <div class="info-bar">
+        <div><i class="fa-solid fa-location-dot"></i> Head Office: Delhi, India</div>
+        <div><i class="fa-solid fa-phone"></i> +91 8796422218</div>
+        <div><i class="fa-solid fa-envelope"></i> info@truemoveimmigration.com</div>
+    </div>
+    <nav class="navbar">
+        <a aria-label="True Move Immigration Home" class="logo-img" href="index.html">
+            <img src="images/Trueimigration.png" alt="True Move Immigration">
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li class="dropdown">
+                <button aria-expanded="false" class="drop-btn" type="button">Canada PR <i
+                        class="fa-solid fa-chevron-down"></i></button>
+                <ul class="dropdown-menu">
+                    <li><a href="canada-pr.html">Express Entry</a></li>
+                    <li><a href="canada-pr.html">PNP Program</a></li>
+                    <li><a href="canada-pr.html">CRS Calculator</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <button aria-expanded="false" class="drop-btn" type="button">Study Visa <i
+                        class="fa-solid fa-chevron-down"></i></button>
+                <ul class="dropdown-menu">
+                    <li><a href="study-visa.html">Canada Study Visa</a></li>
+                    <li><a href="study-visa.html">UK Study Visa</a></li>
+                    <li><a href="study-visa.html">Australia Study Visa</a></li>
+                </ul>
+            </li>
+            <li><a href="work-permit.html">Work Permit</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a class="nav-cta" href="apply.html">Free Consultation</a></li>
+        </ul>
+        <button aria-label="Open menu" class="menu-btn" onclick="toggleMenu()" type="button"><i
+                class="fa-solid fa-bars"></i></button>
+    </nav>
+
+
+
+
+    <!-- HERO -->
+    <section class="inner-hero">
+        <p class="mini-title">
+            Immigration Form
+        </p>
+        <h1>
+            Start Your Immigration Journey
+        </h1>
+        <p>
+            Fill out the assessment form and our immigration experts will contact you.
+        </p>
+    </section>
+    <!-- APPLY FORM -->
+    <section class="apply-section">
+        <div class="apply-container">
+            <div class="apply-header">
+                <h1>
+                    Immigration Assessment Form
+                </h1>
+                <p>
+                    Get personalized visa guidance based on your profile.
+                </p>
+            </div>
+            <form class="apply-form">
+                <div class="form-grid">
+                    <!-- FULL NAME -->
+                    <div class="input-box">
+                        <label>
+                            Full Name
+                        </label>
+                        <input name="fullName" placeholder="Enter your full name" required="" type="text" />
+                    </div>
+                    <!-- DOB -->
+                    <div class="input-box">
+                        <label>
+                            Date of Birth
+                        </label>
+                        <input name="dob" required="" type="date" />
+                    </div>
+                    <!-- GENDER -->
+                    <div class="input-box">
+                        <label>
+                            Gender
+                        </label>
+                        <select name="gender" required="">
+                            <option value="">
+                                Select Gender
+                            </option>
+                            <option>
+                                Male
+                            </option>
+                            <option>
+                                Female
+                            </option>
+                            <option>
+                                Other
+                            </option>
+                        </select>
+                    </div>
+                    <!-- EMAIL -->
+                    <div class="input-box">
+                        <label>
+                            Email Address
+                        </label>
+                        <input name="email" placeholder="Enter your email" required="" type="email" />
+                    </div>
+                    <!-- PHONE -->
+                    <div class="input-box">
+                        <label>
+                            Phone Number
+                        </label>
+                        <input name="phone" placeholder="Enter phone number" required="" type="tel" />
+                    </div>
+                    <!-- NATIONALITY -->
+                    <div class="input-box">
+                        <label>
+                            Nationality
+                        </label>
+                        <input name="nationality" placeholder="Enter nationality" required="" type="text" />
+                    </div>
+                    <!-- PURPOSE -->
+                    <div class="input-box">
+                        <label>
+                            Purpose of Travel
+                        </label>
+                        <select name="purpose" required="">
+                            <option value="">
+                                Select Purpose
+                            </option>
+                            <option>
+                                Education
+                            </option>
+                            <option>
+                                Work Permit
+                            </option>
+                            <option>
+                                Tourist Visa
+                            </option>
+                            <option>
+                                Business Visa
+                            </option>
+                            <option>
+                                Permanent Residency
+                            </option>
+                        </select>
+                    </div>
+                    <!-- EDUCATION -->
+                    <div class="input-box">
+                        <label>
+                            Education Level
+                        </label>
+                        <select name="education" required="">
+                            <option value="">
+                                Select Education
+                            </option>
+                            <option>
+                                High School
+                            </option>
+                            <option>
+                                Diploma
+                            </option>
+                            <option>
+                                Bachelor Degree
+                            </option>
+                            <option>
+                                Master Degree
+                            </option>
+                            <option>
+                                PhD
+                            </option>
+                        </select>
+                    </div>
+                    <!-- EXPERIENCE -->
+                    <div class="input-box full-width">
+                        <label>
+                            Work Experience
+                        </label>
+                        <textarea name="experience" placeholder="Describe your work experience"></textarea>
+                    </div>
+                    <!-- CV -->
+                    <div class="input-box full-width">
+                        <label>
+                            Upload CV / Resume
+                        </label>
+                        <input name="cv" type="file" />
+                    </div>
+                </div>
+                <!-- BUTTON -->
+                <button class="submit-btn" type="submit">
+
+                    Submit Application
+
+                </button>
+            </form>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <h2>True Move<span>Immigration</span></h2>
+                <p>Your trusted partner for PR, study visa, work permit, tourist visa and immigration consultation.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="services.html">Services</a>
+                <a href="apply.html">Apply Now</a>
+                <a href="contact.html">Contact</a>
+            </div>
+            <div>
+                <h3>Visa Services</h3>
+                <a href="canada-pr.html">Canada PR</a>
+                <a href="australia-pr.html">Australia PR</a>
+                <a href="study-visa.html">Study Visa</a>
+                <a href="work-permit.html">Work Permit</a>
+                <a href="tourist-visa.html">Tourist Visa</a>
+            </div>
+            <div>
+                <h3>Contact Info</h3>
+                <p><i class="fa-solid fa-phone"></i> +91 8796422218</p>
+                <p><i class="fa-solid fa-envelope"></i> info@truemoveimmigration.com</p>
+                <p><i class="fa-solid fa-location-dot"></i> New Delhi, India</p>
+                <p><i class="fa-solid fa-clock"></i> Mon - Sat: 10AM - 6PM</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2026 True Move Immigration. All Rights Reserved.
+        </div>
+    </footer>
+
+    <div class="chat-bubble" id="chatBubble" onclick="openChat()">
+        <div class="chat-text">May I help you?</div>
+        <div class="chat-photo">
+            <img alt="Chat Support"
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=200&amp;q=80" />
+        </div>
+    </div>
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <div class="chat-user">
+                <div class="chat-avatar">
+                    <img alt="Support"
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&amp;fit=crop&amp;w=200&amp;q=80" />
+                </div>
+                <h3>True Move Immigration</h3>
+            </div>
+            <button onclick="closeChat()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="chat-body">
+            <div class="bot-msg">Welcome to True Move Immigration.</div>
+            <div class="bot-msg">How may I help you?</div>
+            <div class="bot-msg">Please let us know your name.</div>
+        </div>
+        <div class="chat-input">
+            <input id="chatMessage" placeholder="Type your message..." type="text" />
+            <button onclick="sendMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    <div class="sticky-actions">
+        <a class="sticky-call" href="tel:+918796422218">
+            <i class="fa-solid fa-phone"></i>
+        </a>
+        <a class="sticky-whatsapp" href="https://wa.me/918796422218?text=Hello,%20I%20want%20immigration%20consultation"
+            target="_blank">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a class="sticky-apply" href="apply.html">
+            Apply Now
+        </a>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

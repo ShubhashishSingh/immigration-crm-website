@@ -1,0 +1,4 @@
+node_modules
+.env
+google-sheet-key.json
+backend/uploads
