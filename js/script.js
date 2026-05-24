@@ -139,7 +139,7 @@ if (applyForm) {
     const formData = new FormData(applyForm);
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/applications", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/applications/create", {
         method: "POST",
         body: formData
       });
