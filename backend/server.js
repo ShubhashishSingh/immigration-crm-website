@@ -17,11 +17,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/uploads", express.static("uploads"));
-app.use("/api/contact", contactRoutes);
-app.use("/api/eligibility", eligibilityRoutes);
-app.use("/api/chat", chatRoutes);
-app.use("/api/admin", adminRoutes);
 
 app.get("/", (req, res) => {
     res.send("Immigration Backend Running Successfully");
@@ -29,6 +26,10 @@ app.get("/", (req, res) => {
 
 app.use("/api/inquiries", inquiryRoutes);
 app.use("/api/applications", applicationRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/eligibility", eligibilityRoutes);
+app.use("/api/chat", chatRoutes);
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 
