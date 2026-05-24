@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ChatLead = require("../models/chatlead");
+const ChatLead = require("../models/chatLeadModel");
 
 router.post("/create", async (req, res) => {
   try {
