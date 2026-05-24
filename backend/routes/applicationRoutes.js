@@ -2,25 +2,33 @@ const addLeadToSheet = require("../googleSheets");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
 const Application = require("../models/Application");
 
-/* STORAGE */
+const uploadDir = path.join(__dirname, "../uploads");
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "uploads/");
+        cb(null, uploadDir);
     },
-
     filename: function (req, file, cb) {
         cb(null, Date.now() + "-" + file.originalname);
     }
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-/* CREATE APPLICATION */
 router.post("/create", upload.single("cv"), async (req, res) => {
     try {
+        console.log("APPLICATION BODY:", req.body);
+        console.log("APPLICATION FILE:", req.file);
+
         const application = new Application({
             fullName: req.body.fullName,
             dob: req.body.dob,
@@ -31,7 +39,7 @@ router.post("/create", upload.single("cv"), async (req, res) => {
             purpose: req.body.purpose,
             education: req.body.education,
             experience: req.body.experience,
-            cv: req.file ? req.file.path : ""
+            cv: req.file ? `uploads/${req.file.filename}` : ""
         });
 
         await application.save();
@@ -51,7 +59,7 @@ router.post("/create", upload.single("cv"), async (req, res) => {
             console.log("Google Sheet Error:", sheetError.message);
         }
 
-        return res.status(201).json({
+        res.status(201).json({
             success: true,
             message: "Application Submitted Successfully",
             application
@@ -60,7 +68,7 @@ router.post("/create", upload.single("cv"), async (req, res) => {
     } catch (error) {
         console.log("Application Error:", error.message);
 
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
             message: error.message
         });
