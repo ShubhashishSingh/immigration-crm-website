@@ -262,3 +262,25 @@ img{display:block;max-width:100%;}
 @media(max-width:600px){.chat-bubble{right:15px;bottom:20px}.chat-text{font-size:17px;padding:14px 18px}.chat-photo{width:70px;height:70px}.chat-widget{width:92%;right:4%;bottom:20px}}
 @media(max-width:480px){.logo-img img{width:165px!important}.navbar{padding:14px 5%}.nav-links{width:88%;padding:32px 24px}}
 
+.footer-social,
+.footer-social a,
+.footer-social i{
+    position: relative;
+    z-index: 99999;
+    pointer-events: auto !important;
+}
+
+.footer-social a{
+    cursor: none;
+}
+
+.social-link{
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 99999;
+    text-decoration: none;
+}
+
+.social-link i{
+    pointer-events: none;
+}

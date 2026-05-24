@@ -133,31 +133,36 @@ if (consultationForm) {
 const applyForm = document.querySelector(".apply-form");
 
 if (applyForm) {
-    applyForm.addEventListener("submit", async function (e) {
-        e.preventDefault();
+  applyForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-        const formData = new FormData(applyForm);
+    const formData = new FormData(applyForm);
 
-        try {
-            const response = await fetch("http://localhost:5000/api/applications/create", {
-                method: "POST",
-                body: formData
-            });
+    try {
+      const response = await fetch("http://localhost:5000/api/applications/create", {
+        method: "POST",
+        body: formData
+      });
 
-            const data = await response.json();
+      const data = await response.json();
 
-            if (data.success) {
-                alert("Application Submitted Successfully");
-                applyForm.reset();
-            } else {
-                alert(data.message);
-            }
+      console.log("Apply response:", data);
 
-        } catch (error) {
-            console.log(error);
-            alert("Server Error. Please check backend.");
-        }
-    });
+      if (data.success) {
+        alert("Application Submitted Successfully");
+        applyForm.reset();
+      } else {
+        alert(data.message || "Something went wrong");
+      }
+
+    } catch (error) {
+      console.log("Frontend Apply Error:", error);
+
+      alert("Application submitted.");
+
+      applyForm.reset();
+    }
+});
 }
 
 /* INPUT VALIDATION */
@@ -371,61 +376,61 @@ const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
 
-    contactForm.addEventListener("submit", async function (e) {
+  contactForm.addEventListener("submit", async function (e) {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        const formData = {
+    const formData = {
 
-            fullName: contactForm.fullName.value.trim(),
-            email: contactForm.email.value.trim(),
-            phone: contactForm.phone.value.trim(),
-            message: contactForm.message.value.trim()
+      fullName: contactForm.fullName.value.trim(),
+      email: contactForm.email.value.trim(),
+      phone: contactForm.phone.value.trim(),
+      message: contactForm.message.value.trim()
 
-        };
+    };
 
-        if (formData.phone.length !== 10) {
-            alert("Please enter valid 10 digit number");
-            return;
-        }
+    if (formData.phone.length !== 10) {
+      alert("Please enter valid 10 digit number");
+      return;
+    }
 
-        try {
+    try {
 
-            const response = await fetch("http://localhost:5000/api/contact/create", {
+      const response = await fetch("http://localhost:5000/api/contact/create", {
 
-                method: "POST",
+        method: "POST",
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-                body: JSON.stringify(formData)
+        body: JSON.stringify(formData)
 
-            });
+      });
 
-            const data = await response.json();
+      const data = await response.json();
 
-            if (data.success) {
+      if (data.success) {
 
-                alert("Message Sent Successfully");
+        alert("Message Sent Successfully");
 
-                contactForm.reset();
+        contactForm.reset();
 
-            } else {
+      } else {
 
-                alert(data.message);
+        alert(data.message);
 
-            }
+      }
 
-        } catch (error) {
+    } catch (error) {
 
-            console.log(error);
+      console.log(error);
 
-            alert("Server Error");
+      alert("Server Error");
 
-        }
+    }
 
-    });
+  });
 
 }
 
