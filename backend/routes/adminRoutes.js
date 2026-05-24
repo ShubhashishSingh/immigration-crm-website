@@ -5,7 +5,7 @@ const Inquiry = require("../models/Inquiry");
 const Application = require("../models/Application");
 const Contact = require("../models/Contact");
 const Eligibility = require("../models/Eligibility");
-const ChatLead = require("../models/ChatLead");
+const ChatLead = require("../models/chatLeadModel");
 
 router.get("/leads", async (req, res) => {
   try {
