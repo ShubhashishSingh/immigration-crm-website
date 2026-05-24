@@ -106,7 +106,7 @@ if (consultationForm) {
     }
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/inquiries", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -139,22 +139,19 @@ if (applyForm) {
     const formData = new FormData(applyForm);
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/applications", {
         method: "POST",
         body: formData
       });
 
       const data = await response.json();
 
-      console.log("Apply response:", data);
-
-      if (data.success) {
-        alert("Application Submitted Successfully");
+      if (response.ok && data.success) {
+        alert("Application submitted successfully");
         applyForm.reset();
       } else {
-        alert(data.message || "Something went wrong");
+        alert(data.message || "Application submit failed");
       }
-
     } catch (error) {
       console.log("Frontend Apply Error:", error);
 
@@ -162,7 +159,7 @@ if (applyForm) {
 
       applyForm.reset();
     }
-});
+  });
 }
 
 /* INPUT VALIDATION */
@@ -306,7 +303,7 @@ function sendMessage() {
 
       try {
 
-        await fetch("https://immigration-crm-website-production.up.railway.app", {
+        await fetch("https://immigration-crm-website-production.up.railway.app/api/chat", {
 
           method: "POST",
 
@@ -396,7 +393,7 @@ if (contactForm) {
 
     try {
 
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/contact", {
 
         method: "POST",
 
@@ -458,7 +455,7 @@ if (eligibilityForm) {
     }
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/eligibility", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
