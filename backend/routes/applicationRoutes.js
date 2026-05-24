@@ -55,6 +55,9 @@ router.post("/create", upload.single("cv"), async (req, res) => {
                 message: application.experience,
                 cv: application.cv
             });
+
+            console.log("Google Sheet Updated Successfully");
+
         } catch (sheetError) {
             console.log("Google Sheet Error:", sheetError.message);
         }
