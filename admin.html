@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,11 +47,13 @@
             background: #0d6efd;
             padding: 14px;
             text-align: left;
+            white-space: nowrap;
         }
 
         td {
             padding: 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
         }
 
         tr:hover {
@@ -62,31 +63,26 @@
         a {
             color: #00d9ff;
             text-decoration: none;
-        }
-
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: #ff9933;
-            color: #000;
             font-weight: bold;
         }
 
-        /* ADMIN DELETE BUTTON */
+        a:hover {
+            text-decoration: underline;
+        }
 
         table button {
-            background: #ff3131 !important;
-            color: #fff !important;
-            border: none !important;
-            padding: 10px 16px !important;
-            border-radius: 8px !important;
-            cursor: pointer !important;
-            font-weight: 700 !important;
+            background: #ff3131;
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
             transition: 0.3s;
         }
 
         table button:hover {
-            background: #d90000 !important;
+            background: #d90000;
             transform: scale(1.05);
         }
 
@@ -112,7 +108,8 @@
             color: #9fb3d9;
         }
 
-        .search-box button {
+        .search-box button,
+        .export-btn {
             padding: 16px 24px;
             border: none;
             border-radius: 12px;
@@ -125,37 +122,35 @@
         .export-btn {
             display: block;
             margin: 0 auto 35px;
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #0056ff, #ff3131, #ff9933);
-            color: #fff;
-            font-weight: 800;
-            cursor: pointer;
         }
     </style>
+
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
 
     <h1>Immigration Admin Dashboard</h1>
+
     <div class="search-box">
-
         <input type="text" id="searchInput" placeholder="Search by name, phone, email, service, country...">
-
-        <button onclick="filterDashboard()">
-            Search
-        </button>
-
+        <button onclick="filterDashboard()">Search</button>
     </div>
-    <button class="export-btn" onclick="exportToExcel()">
-        Export All Leads
-    </button>
+
+    <button class="export-btn" onclick="exportToExcel()">Export All Leads</button>
+
     <div id="dashboard"></div>
 
     <script>
-        let allDashboardData = {};
+        const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
+
+        let allDashboardData = {
+            inquiries: [],
+            applications: [],
+            contacts: [],
+            eligibilities: [],
+            chatLeads: []
+        };
 
         async function deleteLead(title, id) {
             const typeMap = {
@@ -170,17 +165,22 @@
 
             if (!confirm("Are you sure you want to delete this lead?")) return;
 
-            const response = await fetch(`http://localhost:5000/api/admin/delete/${type}/${id}`, {
-                method: "DELETE"
-            });
+            try {
+                const response = await fetch(`${BASE_URL}/api/admin/delete/${type}/${id}`, {
+                    method: "DELETE"
+                });
 
-            const data = await response.json();
+                const data = await response.json();
 
-            if (data.success) {
-                alert("Lead deleted successfully");
-                loadDashboard();
-            } else {
-                alert(data.message);
+                if (data.success) {
+                    alert("Lead deleted successfully");
+                    loadDashboard();
+                } else {
+                    alert(data.message || "Delete failed");
+                }
+            } catch (error) {
+                alert("Server error while deleting lead");
+                console.error(error);
             }
         }
 
@@ -190,44 +190,50 @@
             const headers = Object.keys(items[0]).filter(key => key !== "__v");
 
             let html = `
-        <h2>${title}</h2>
-        <div class="table-wrapper">
-        <table>
-            <tr>
-                ${headers.map(h => `<th>${h}</th>`).join("")}
-                <th>Action</th>
-            </tr>
-    `;
+                <h2>${title}</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <tr>
+                            ${headers.map(h => `<th>${h}</th>`).join("")}
+                            <th>Action</th>
+                        </tr>
+            `;
 
             items.forEach(item => {
                 html += "<tr>";
 
                 headers.forEach(key => {
                     if (key === "cv" && item[key]) {
+                        const cvPath = item[key].replace(/\\/g, "/");
+                        const cvUrl = `${BASE_URL}/${cvPath}`;
+
                         html += `
-                    <td>
-                        <a href="http://localhost:5000/${item[key]}" target="_blank">
-                            View CV
-                        </a>
-                    </td>
-                `;
+                            <td>
+                                <a href="${cvUrl}" target="_blank" rel="noopener noreferrer">
+                                    View CV
+                                </a>
+                            </td>
+                        `;
                     } else {
                         html += `<td>${item[key] || ""}</td>`;
                     }
                 });
 
                 html += `
-            <td>
-                <button onclick="deleteLead('${title}', '${item._id}')">
-                    Delete
-                </button>
-            </td>
-        `;
+                    <td>
+                        <button onclick="deleteLead('${title}', '${item._id}')">
+                            Delete
+                        </button>
+                    </td>
+                `;
 
                 html += "</tr>";
             });
 
-            html += "</table></div>";
+            html += `
+                    </table>
+                </div>
+            `;
 
             return html;
         }
@@ -248,11 +254,24 @@
         }
 
         async function loadDashboard() {
-            const response = await fetch("http://localhost:5000/api/admin/leads");
-            const data = await response.json();
+            try {
+                const response = await fetch(`${BASE_URL}/api/admin/leads`);
+                const data = await response.json();
 
-            allDashboardData = data;
-            renderDashboard(data);
+                allDashboardData = {
+                    inquiries: data.inquiries || [],
+                    applications: data.applications || [],
+                    contacts: data.contacts || [],
+                    eligibilities: data.eligibilities || [],
+                    chatLeads: data.chatLeads || []
+                };
+
+                renderDashboard(allDashboardData);
+            } catch (error) {
+                document.getElementById("dashboard").innerHTML =
+                    "<p style='text-align:center;color:#ff3131;font-size:22px;'>Failed to load dashboard data</p>";
+                console.error(error);
+            }
         }
 
         function filterDashboard() {
@@ -284,8 +303,6 @@
             renderDashboard(filteredData);
         }
 
-        loadDashboard();
-
         function exportToExcel() {
             const workbook = XLSX.utils.book_new();
 
@@ -314,7 +331,9 @@
 
             XLSX.writeFile(workbook, "immigration-leads.xlsx");
         }
-    </script>
-</body>
 
+        loadDashboard();
+    </script>
+
+</body>
 </html>

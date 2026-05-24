@@ -106,7 +106,7 @@ if (consultationForm) {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/inquiries/create", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -139,7 +139,7 @@ if (applyForm) {
     const formData = new FormData(applyForm);
 
     try {
-      const response = await fetch("http://localhost:5000/api/applications/create", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
         method: "POST",
         body: formData
       });
@@ -306,7 +306,7 @@ function sendMessage() {
 
       try {
 
-        await fetch("http://localhost:5000/api/chat/create", {
+        await fetch("https://immigration-crm-website-production.up.railway.app", {
 
           method: "POST",
 
@@ -396,7 +396,7 @@ if (contactForm) {
 
     try {
 
-      const response = await fetch("http://localhost:5000/api/contact/create", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
 
         method: "POST",
 
@@ -458,7 +458,7 @@ if (eligibilityForm) {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/eligibility/create", {
+      const response = await fetch("https://immigration-crm-website-production.up.railway.app", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
