@@ -1,7 +1,6 @@
 console.log("script.js loaded");
 
 const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
-
 /* MOBILE MENU */
 function toggleMenu() {
   const nav = document.getElementById("navLinks");
@@ -457,5 +456,81 @@ async function sendMessage() {
     chatBody.scrollTop = chatBody.scrollHeight;
 
   }, 700);
+
+}
+
+// navbar code
+// dropdown code
+// chat code
+// animations code
+
+
+
+/* COUNTER ANIMATION */
+const counters = document.querySelectorAll(".counter");
+
+const startCounters = () => {
+
+  counters.forEach(counter => {
+
+    if (counter.classList.contains("started")) return;
+
+    const top = counter.getBoundingClientRect().top;
+
+    if (top < window.innerHeight - 50) {
+
+      counter.classList.add("started");
+
+      const target = Number(counter.getAttribute("data-target"));
+
+      let count = 0;
+
+      const speed = 80;
+
+      const increment = target / speed;
+
+      const updateCounter = () => {
+
+        count += increment;
+
+        if (count < target) {
+
+          counter.innerText = Math.ceil(count);
+
+          requestAnimationFrame(updateCounter);
+
+        } else {
+
+          counter.innerText = target;
+
+        }
+
+      };
+
+      updateCounter();
+
+    }
+
+  });
+
+};
+
+window.addEventListener("scroll", startCounters);
+window.addEventListener("load", startCounters);
+
+/* ENTER KEY SUPPORT FOR CHAT */
+const chatInput = document.getElementById("chatMessage");
+
+if (chatInput) {
+
+  chatInput.addEventListener("keypress", function (e) {
+
+    if (e.key === "Enter") {
+
+      sendMessage();
+
+    }
+
+  });
 
 }
