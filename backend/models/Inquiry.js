@@ -26,8 +26,12 @@ const inquirySchema = new mongoose.Schema({
     service: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ["New", "Contacted", "Approved", "Rejected"],
+        default: "New"
     }
-
 }, {
     timestamps: true
 });

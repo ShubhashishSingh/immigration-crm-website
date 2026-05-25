@@ -43,7 +43,14 @@ const eligibilitySchema = new mongoose.Schema({
   country: {
     type: String,
     required: true
+  },
+
+  status: {
+    type: String,
+    enum: ["New", "Contacted", "Approved", "Rejected"],
+    default: "New"
   }
+
 }, {
   timestamps: true
 });

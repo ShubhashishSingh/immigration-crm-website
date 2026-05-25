@@ -99,4 +99,52 @@ router.delete("/delete/:type/:id", verifyAdmin, async (req, res) => {
   }
 });
 
+router.put("/status/:type/:id", verifyAdmin, async (req, res) => {
+  try {
+    const { type, id } = req.params;
+    const { status } = req.body;
+
+    const allowedStatus = ["New", "Contacted", "Approved", "Rejected"];
+
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status"
+      });
+    }
+
+    let Model;
+
+    if (type === "inquiries") Model = Inquiry;
+    else if (type === "applications") Model = Application;
+    else if (type === "contacts") Model = Contact;
+    else if (type === "eligibilities") Model = Eligibility;
+    else if (type === "chatLeads") Model = ChatLead;
+    else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid lead type"
+      });
+    }
+
+    const updatedLead = await Model.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      message: "Status updated successfully",
+      lead: updatedLead
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+});
+
 module.exports = router;

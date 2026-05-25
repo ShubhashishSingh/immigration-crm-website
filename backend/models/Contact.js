@@ -24,6 +24,12 @@ const contactSchema = new mongoose.Schema({
         type: String,
         required: true,
         maxlength: 500
+    },
+
+    status: {
+        type: String,
+        enum: ["New", "Contacted", "Approved", "Rejected"],
+        default: "New"
     }
 
 }, {
