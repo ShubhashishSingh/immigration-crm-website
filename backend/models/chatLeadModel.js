@@ -10,7 +10,12 @@ const chatLeadSchema = new mongoose.Schema({
     experience: String,
     education: String,
     languageScore: String,
-    budget: String
+    budget: String,
+    status: {
+        type: String,
+        enum: ["New", "Contacted", "Approved", "Rejected"],
+        default: "New"
+    }
 }, {
     timestamps: true
 });

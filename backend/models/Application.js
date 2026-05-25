@@ -21,7 +21,14 @@ const applicationSchema = new mongoose.Schema({
     purpose: { type: String, required: true },
     education: { type: String, required: true },
     experience: { type: String },
-    cv: { type: String }
+    cv: { type: String },
+    status: {
+        type: String,
+        enum: ["New", "Contacted", "Approved", "Rejected"],
+        default: "New"
+    }
+
+
 }, {
     timestamps: true
 });
