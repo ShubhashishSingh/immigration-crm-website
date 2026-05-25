@@ -1,5 +1,7 @@
 console.log("script.js loaded");
 
+const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
+
 /* MOBILE MENU */
 function toggleMenu() {
   const nav = document.getElementById("navLinks");
@@ -65,7 +67,7 @@ document.addEventListener("click", function (e) {
   }
 });
 
-/* CLOSE MOBILE MENU AFTER LINK CLICK */
+/* CLOSE MOBILE MENU */
 document.querySelectorAll(".nav-links a").forEach((link) => {
   link.addEventListener("click", () => {
     const nav = document.getElementById("navLinks");
@@ -75,7 +77,7 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
   });
 });
 
-/* ACTIVE NAV LINK */
+/* ACTIVE NAV */
 const currentPage = window.location.pathname.split("/").pop() || "index.html";
 
 document.querySelectorAll(".nav-links a").forEach((link) => {
@@ -90,7 +92,9 @@ document.querySelectorAll(".nav-links a").forEach((link) => {
 const consultationForm = document.querySelector(".hero-consult-form");
 
 if (consultationForm) {
+
   consultationForm.addEventListener("submit", async function (e) {
+
     e.preventDefault();
 
     const formData = {
@@ -101,274 +105,98 @@ if (consultationForm) {
     };
 
     if (formData.phone.length !== 10) {
-      alert("Please enter a valid 10 digit phone number.");
+      alert("Please enter valid 10 digit number");
       return;
     }
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/inquiries", {
+
+      const response = await fetch(`${BASE_URL}/api/inquiries/create`, {
+
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify(formData)
+
       });
 
       const data = await response.json();
 
       if (data.success) {
-        alert("Thank you! Your inquiry has been submitted successfully.");
+
+        alert("Inquiry Submitted Successfully");
+
         consultationForm.reset();
+
       } else {
-        alert(data.message || "Something went wrong. Please try again.");
+
+        alert(data.message);
+
       }
+
     } catch (error) {
+
       console.log(error);
-      alert("Server error. Please check backend is running.");
+
+      alert("Server Error");
+
     }
+
   });
+
 }
 
 /* APPLY FORM */
 const applyForm = document.querySelector(".apply-form");
 
 if (applyForm) {
+
   applyForm.addEventListener("submit", async function (e) {
+
     e.preventDefault();
 
     const formData = new FormData(applyForm);
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/applications/create", {
+
+      const response = await fetch(`${BASE_URL}/api/applications/create`, {
+
         method: "POST",
+
         body: formData
+
       });
 
       const data = await response.json();
 
       if (response.ok && data.success) {
-        alert("Application submitted successfully");
+
+        alert("Application Submitted Successfully");
+
         applyForm.reset();
+
       } else {
+
         alert(data.message || "Application submit failed");
+
       }
+
     } catch (error) {
-      console.log("Frontend Apply Error:", error);
 
-      alert("Application submitted.");
+      console.log(error);
 
-      applyForm.reset();
-    }
-  });
-}
-
-/* INPUT VALIDATION */
-document.querySelectorAll('input[type="tel"]').forEach((input) => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^0-9]/g, "").slice(0, 10);
-  });
-});
-
-document.querySelectorAll('input[name="fullName"]').forEach((input) => {
-  input.addEventListener("input", () => {
-    input.value = input.value.replace(/[^a-zA-Z ]/g, "").slice(0, 30);
-  });
-});
-
-/* FAQ */
-function toggleFaq(button) {
-  const item = button.closest(".faq-item");
-
-  if (item) {
-    item.classList.toggle("active");
-  }
-}
-
-/* CHAT */
-function openChat() {
-  const widget = document.getElementById("chatWidget");
-  const bubble = document.getElementById("chatBubble");
-
-  if (widget) {
-    widget.style.display = "block";
-  }
-
-  if (bubble) {
-    bubble.style.display = "none";
-  }
-}
-
-function closeChat() {
-  const widget = document.getElementById("chatWidget");
-  const bubble = document.getElementById("chatBubble");
-
-  if (widget) {
-    widget.style.display = "none";
-  }
-
-  if (bubble) {
-    bubble.style.display = "flex";
-  }
-}
-
-const questions = [
-
-  "Welcome To True Move Immigration.\n\nOur Team Is Ready To Assist You In Achieving Your Immigration Goals.\n\nPlease provide your name.",
-
-  "What’s Your Dream Destination?",
-
-  "Kindly share your contact number. Our Immigration experts will contact you to discuss further.",
-
-  "What Kind Of Visa Are You Looking For?",
-
-  "Great! Kindly Share Your Email Address.",
-
-  "Are You Willing To Get Paid Services?",
-
-  "May I Know Your Total Work Experience ?",
-
-  "What is your highest qualification?",
-
-  "Do you have IELTS/PTE score?",
-
-  "What is your approximate budget for immigration process?"
-];
-
-let currentQuestion = 0;
-
-const chatAnswers = {};
-
-const answerKeys = [
-  "name",
-  "destination",
-  "phone",
-  "visaType",
-  "email",
-  "paidService",
-  "experience",
-  "education",
-  "languageScore",
-  "budget"
-];
-
-function sendMessage() {
-
-  const input = document.getElementById("chatMessage");
-  const chatBody = document.querySelector(".chat-body");
-
-  if (!input || !chatBody) return;
-
-  const message = input.value.trim();
-
-  if (message === "") return;
-
-  /* USER MESSAGE */
-
-  const userMsg = document.createElement("div");
-
-  userMsg.className = "user-msg";
-
-  userMsg.innerText = message;
-
-  chatBody.appendChild(userMsg);
-
-  /* SAVE ANSWER */
-
-  chatAnswers[answerKeys[currentQuestion]] = message;
-
-  input.value = "";
-
-  currentQuestion++;
-
-  setTimeout(async () => {
-
-    const botMsg = document.createElement("div");
-
-    botMsg.className = "bot-msg";
-
-    if (currentQuestion < questions.length) {
-
-      botMsg.innerText = questions[currentQuestion];
-
-      chatBody.appendChild(botMsg);
-
-    } else {
-
-      botMsg.innerText =
-        "Thank you for sharing your details.\n\nOur immigration expert will contact you shortly.";
-
-      chatBody.appendChild(botMsg);
-
-      /* SAVE TO DATABASE */
-
-      try {
-
-        await fetch("https://immigration-crm-website-production.up.railway.app/api/chat", {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify(chatAnswers)
-
-        });
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
+      alert("Server Error");
 
     }
 
-    chatBody.scrollTop = chatBody.scrollHeight;
-
-  }, 700);
+  });
 
 }
-
-/* COUNTERS */
-const counters = document.querySelectorAll(".counter");
-let counterStarted = false;
-
-function startCounters() {
-  if (counterStarted) return;
-
-  const counterSection = document.querySelector(".counter-section");
-
-  if (!counterSection) return;
-
-  if (counterSection.getBoundingClientRect().top < window.innerHeight - 100) {
-    counters.forEach((counter) => {
-      const target = Number(counter.getAttribute("data-target")) || 0;
-      let count = 0;
-      const speed = Math.max(target / 120, 1);
-
-      function updateCounter() {
-        count += speed;
-
-        if (count < target) {
-          counter.innerText = Math.ceil(count);
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.innerText = target + "+";
-        }
-      }
-
-      updateCounter();
-    });
-
-    counterStarted = true;
-  }
-}
-
-window.addEventListener("scroll", startCounters);
-window.addEventListener("load", startCounters);
 
 /* CONTACT FORM */
-
 const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
@@ -393,7 +221,7 @@ if (contactForm) {
 
     try {
 
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/contact", {
+      const response = await fetch(`${BASE_URL}/api/contact/create`, {
 
         method: "POST",
 
@@ -432,14 +260,16 @@ if (contactForm) {
 }
 
 /* ELIGIBILITY FORM */
-
 const eligibilityForm = document.querySelector(".eligibility-form");
 
 if (eligibilityForm) {
+
   eligibilityForm.addEventListener("submit", async function (e) {
+
     e.preventDefault();
 
     const formData = {
+
       fullName: eligibilityForm.fullName.value.trim(),
       phone: eligibilityForm.phone.value.trim(),
       age: eligibilityForm.age.value,
@@ -447,6 +277,7 @@ if (eligibilityForm) {
       experience: eligibilityForm.experience.value,
       purpose: eligibilityForm.purpose.value,
       country: eligibilityForm.country.value
+
     };
 
     if (formData.phone.length !== 10) {
@@ -455,26 +286,176 @@ if (eligibilityForm) {
     }
 
     try {
-      const response = await fetch("https://immigration-crm-website-production.up.railway.app/api/eligibility", {
+
+      const response = await fetch(`${BASE_URL}/api/eligibility/create`, {
+
         method: "POST",
+
         headers: {
           "Content-Type": "application/json"
         },
+
         body: JSON.stringify(formData)
+
       });
 
       const data = await response.json();
 
       if (data.success) {
+
         alert("Eligibility Submitted Successfully");
+
         eligibilityForm.reset();
+
       } else {
+
         alert(data.message);
+
       }
 
     } catch (error) {
+
       console.log(error);
+
       alert("Server Error");
+
     }
+
   });
+
+}
+
+/* CHAT */
+function openChat() {
+
+  const widget = document.getElementById("chatWidget");
+  const bubble = document.getElementById("chatBubble");
+
+  if (widget) {
+    widget.style.display = "block";
+  }
+
+  if (bubble) {
+    bubble.style.display = "none";
+  }
+
+}
+
+function closeChat() {
+
+  const widget = document.getElementById("chatWidget");
+  const bubble = document.getElementById("chatBubble");
+
+  if (widget) {
+    widget.style.display = "none";
+  }
+
+  if (bubble) {
+    bubble.style.display = "flex";
+  }
+
+}
+
+const questions = [
+
+  "Welcome To True Move Immigration.\n\nPlease provide your name.",
+  "What’s Your Dream Destination?",
+  "Kindly share your contact number.",
+  "What Kind Of Visa Are You Looking For?",
+  "Great! Kindly Share Your Email Address.",
+  "Are You Willing To Get Paid Services?",
+  "May I Know Your Total Work Experience ?",
+  "What is your highest qualification?",
+  "Do you have IELTS/PTE score?",
+  "What is your approximate budget for immigration process?"
+
+];
+
+let currentQuestion = 0;
+
+const chatAnswers = {};
+
+const answerKeys = [
+  "name",
+  "destination",
+  "phone",
+  "visaType",
+  "email",
+  "paidService",
+  "experience",
+  "education",
+  "languageScore",
+  "budget"
+];
+
+async function sendMessage() {
+
+  const input = document.getElementById("chatMessage");
+  const chatBody = document.querySelector(".chat-body");
+
+  if (!input || !chatBody) return;
+
+  const message = input.value.trim();
+
+  if (message === "") return;
+
+  const userMsg = document.createElement("div");
+
+  userMsg.className = "user-msg";
+
+  userMsg.innerText = message;
+
+  chatBody.appendChild(userMsg);
+
+  chatAnswers[answerKeys[currentQuestion]] = message;
+
+  input.value = "";
+
+  currentQuestion++;
+
+  setTimeout(async () => {
+
+    const botMsg = document.createElement("div");
+
+    botMsg.className = "bot-msg";
+
+    if (currentQuestion < questions.length) {
+
+      botMsg.innerText = questions[currentQuestion];
+
+      chatBody.appendChild(botMsg);
+
+    } else {
+
+      botMsg.innerText =
+        "Thank you for sharing your details. Our immigration expert will contact you shortly.";
+
+      chatBody.appendChild(botMsg);
+
+      try {
+
+        await fetch(`${BASE_URL}/api/chat/create`, {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(chatAnswers)
+
+        });
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    }
+
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+  }, 700);
+
 }
