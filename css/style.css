@@ -284,3 +284,30 @@ img{display:block;max-width:100%;}
 .social-link i{
     pointer-events: none;
 }
+.status-select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.status-New {
+    background: #0d6efd;
+    color: #fff;
+}
+
+.status-Contacted {
+    background: #ff9933;
+    color: #000;
+}
+
+.status-Approved {
+    background: #00c853;
+    color: #fff;
+}
+
+.status-Rejected {
+    background: #ff3131;
+    color: #fff;
+}
