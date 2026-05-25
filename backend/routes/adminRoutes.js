@@ -7,7 +7,41 @@ const Contact = require("../models/Contact");
 const Eligibility = require("../models/Eligibility");
 const ChatLead = require("../models/chatLeadModel");
 
-router.get("/leads", async (req, res) => {
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN || "true-move-admin-token";
+
+function verifyAdmin(req, res, next) {
+  const token = req.headers.authorization;
+
+  if (token === `Bearer ${ADMIN_TOKEN}`) {
+    next();
+  } else {
+    res.status(401).json({
+      success: false,
+      message: "Unauthorized access"
+    });
+  }
+}
+
+router.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    return res.json({
+      success: true,
+      message: "Login successful",
+      token: ADMIN_TOKEN
+    });
+  }
+
+  res.status(401).json({
+    success: false,
+    message: "Invalid username or password"
+  });
+});
+
+router.get("/leads", verifyAdmin, async (req, res) => {
   try {
     const inquiries = await Inquiry.find().sort({ createdAt: -1 });
     const applications = await Application.find().sort({ createdAt: -1 });
@@ -32,10 +66,7 @@ router.get("/leads", async (req, res) => {
   }
 });
 
-module.exports = router;
-
-// delete---
-router.delete("/delete/:type/:id", async (req, res) => {
+router.delete("/delete/:type/:id", verifyAdmin, async (req, res) => {
   try {
     const { type, id } = req.params;
 
@@ -67,3 +98,5 @@ router.delete("/delete/:type/:id", async (req, res) => {
     });
   }
 });
+
+module.exports = router;

@@ -30,6 +30,74 @@
             color: #ff9933;
         }
 
+        .login-box {
+            max-width: 420px;
+            margin: 80px auto;
+            background: #101d31;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .login-box h2 {
+            margin: 0 0 20px;
+            text-align: center;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: #071120;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        .login-box button,
+        .search-box button,
+        .export-btn,
+        .logout-btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0056ff, #ff3131, #ff9933);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .login-box button {
+            width: 100%;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            margin: 0 auto 25px;
+            max-width: 700px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #101d31;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
         .table-wrapper {
             overflow-x: auto;
             margin-bottom: 40px;
@@ -52,7 +120,7 @@
 
         td {
             padding: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             white-space: nowrap;
         }
 
@@ -66,10 +134,6 @@
             font-weight: bold;
         }
 
-        a:hover {
-            text-decoration: underline;
-        }
-
         table button {
             background: #ff3131;
             color: #fff;
@@ -78,50 +142,10 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 700;
-            transition: 0.3s;
         }
 
-        table button:hover {
-            background: #d90000;
-            transform: scale(1.05);
-        }
-
-        .search-box {
-            margin: 0 auto 35px;
-            max-width: 700px;
-            display: flex;
-            gap: 12px;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 16px 20px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: #101d31;
-            color: #fff;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: #9fb3d9;
-        }
-
-        .search-box button,
-        .export-btn {
-            padding: 16px 24px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #0056ff, #ff3131, #ff9933);
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .export-btn {
-            display: block;
-            margin: 0 auto 35px;
+        .hidden {
+            display: none;
         }
     </style>
 
@@ -130,16 +154,28 @@
 
 <body>
 
-    <h1>Immigration Admin Dashboard</h1>
-
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search by name, phone, email, service, country...">
-        <button onclick="filterDashboard()">Search</button>
+    <div id="loginSection" class="login-box">
+        <h2>Admin Login</h2>
+        <input type="text" id="adminUsername" placeholder="Username">
+        <input type="password" id="adminPassword" placeholder="Password">
+        <button onclick="adminLogin()">Login</button>
     </div>
 
-    <button class="export-btn" onclick="exportToExcel()">Export All Leads</button>
+    <div id="dashboardSection" class="hidden">
+        <h1>Immigration Admin Dashboard</h1>
 
-    <div id="dashboard"></div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by name, phone, email, service, country...">
+            <button onclick="filterDashboard()">Search</button>
+        </div>
+
+        <div class="top-actions">
+            <button class="export-btn" onclick="exportToExcel()">Export All Leads</button>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+        </div>
+
+        <div id="dashboard"></div>
+    </div>
 
     <script>
         const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
@@ -151,6 +187,58 @@
             eligibilities: [],
             chatLeads: []
         };
+
+        function getAdminToken() {
+            return localStorage.getItem("adminToken");
+        }
+
+        function showDashboard() {
+            document.getElementById("loginSection").classList.add("hidden");
+            document.getElementById("dashboardSection").classList.remove("hidden");
+            loadDashboard();
+        }
+
+        function showLogin() {
+            document.getElementById("loginSection").classList.remove("hidden");
+            document.getElementById("dashboardSection").classList.add("hidden");
+        }
+
+        async function adminLogin() {
+            const username = document.getElementById("adminUsername").value.trim();
+            const password = document.getElementById("adminPassword").value.trim();
+
+            if (!username || !password) {
+                alert("Please enter username and password");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${BASE_URL}/api/admin/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    localStorage.setItem("adminToken", data.token);
+                    showDashboard();
+                } else {
+                    alert(data.message || "Login failed");
+                }
+            } catch (error) {
+                alert("Server error during login");
+                console.error(error);
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem("adminToken");
+            showLogin();
+        }
 
         async function deleteLead(title, id) {
             const typeMap = {
@@ -167,7 +255,10 @@
 
             try {
                 const response = await fetch(`${BASE_URL}/api/admin/delete/${type}/${id}`, {
-                    method: "DELETE"
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${getAdminToken()}`
+                    }
                 });
 
                 const data = await response.json();
@@ -255,8 +346,19 @@
 
         async function loadDashboard() {
             try {
-                const response = await fetch(`${BASE_URL}/api/admin/leads`);
+                const response = await fetch(`${BASE_URL}/api/admin/leads`, {
+                    headers: {
+                        Authorization: `Bearer ${getAdminToken()}`
+                    }
+                });
+
                 const data = await response.json();
+
+                if (response.status === 401) {
+                    alert("Session expired. Please login again.");
+                    logoutAdmin();
+                    return;
+                }
 
                 allDashboardData = {
                     inquiries: data.inquiries || [],
@@ -332,7 +434,11 @@
             XLSX.writeFile(workbook, "immigration-leads.xlsx");
         }
 
-        loadDashboard();
+        if (getAdminToken()) {
+            showDashboard();
+        } else {
+            showLogin();
+        }
     </script>
 
 </body>
