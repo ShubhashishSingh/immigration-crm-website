@@ -1996,3 +1996,32 @@ button {
     text-align: center;
   }
 }
+
+/* GLOBAL WEBSITE SCALE FIX */
+html {
+    zoom: 0.85;
+}
+
+/* FIREFOX FIX */
+@-moz-document url-prefix() {
+    body {
+        transform: scale(0.85);
+        transform-origin: top left;
+        width: 117.65%;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    html {
+        zoom: 0.9;
+    }
+
+    @-moz-document url-prefix() {
+        body {
+            transform: scale(0.9);
+            transform-origin: top left;
+            width: 111.11%;
+        }
+    }
+}
