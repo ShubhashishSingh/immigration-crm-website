@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    
     <style>
         * {
             margin: 0;
@@ -379,14 +380,13 @@
                         const cvUrl = `${BASE_URL}/${cvPath}`;
 
                         html += `
-                            <td>
-                                <a href="${cvUrl}" target="_blank" rel="noopener noreferrer">
-                                    View CV
-                                </a>
-                            </td>
-                        `;
+                        <td>
+                            <a href="${cvUrl}" target="_blank" rel="noopener noreferrer">
+                                View CV
+                            </a>
+                        </td>
+                    `;
                     }
-
                     else {
                         html += `<td>${item[key] || ""}</td>`;
                     }
