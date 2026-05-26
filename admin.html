@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    
+
     <style>
         * {
             margin: 0;
@@ -376,16 +376,17 @@
                     }
 
                     else if (key === "cv" && item[key]) {
-                        const cvPath = item[key].replace(/\\/g, "/");
-                        const cvUrl = `${BASE_URL}/${cvPath}`;
+                        const cvUrl = item[key].startsWith("http")
+                            ? item[key]
+                            : `${BASE_URL}/${item[key].replace(/\\/g, "/")}`;
 
                         html += `
-                        <td>
-                            <a href="${cvUrl}" target="_blank" rel="noopener noreferrer">
-                                View CV
-                            </a>
-                        </td>
-                    `;
+                            <td>
+                                <a href="${cvUrl}" target="_blank" rel="noopener noreferrer">
+                                    View CV
+                                </a>
+                            </td>
+                        `;
                     }
                     else {
                         html += `<td>${item[key] || ""}</td>`;
