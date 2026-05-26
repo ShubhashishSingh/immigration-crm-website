@@ -1,28 +1,20 @@
 const addLeadToSheet = require("../googleSheets");
+const Application = require("../models/Application");
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
+const cloudinary = require("../cloudinary");
 
-const Application = require("../models/Application");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
-const uploadDir = path.join(__dirname, "../uploads");
-
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename: function (req, file, cb) {
-        const safeName = file.originalname.replace(/\s+/g, "-");
-        cb(null, Date.now() + "-" + safeName);
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: "immigration-cv",
+        resource_type: "raw",
+        allowed_formats: ["pdf", "doc", "docx"]
     }
 });
-
 const upload = multer({ storage });
 
 router.post("/create", upload.single("cv"), async (req, res) => {
@@ -40,7 +32,7 @@ router.post("/create", upload.single("cv"), async (req, res) => {
             purpose: req.body.purpose,
             education: req.body.education,
             experience: req.body.experience,
-            cv: req.file ? `uploads/${req.file.filename}` : ""
+            cv: req.file ? req.file.path : ""
         });
 
         await application.save();
