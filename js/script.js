@@ -3,10 +3,11 @@ console.log("script.js loaded");
 const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
 /* MOBILE MENU */
 function toggleMenu() {
-  const nav = document.getElementById("navLinks");
-  if (nav) {
-    nav.classList.toggle("active");
-  }
+    const nav = document.getElementById("navLinks");
+
+    if (nav) {
+        nav.classList.toggle("active");
+    }
 }
 
 /* REVEAL ANIMATION */
