@@ -1,6 +1,6 @@
 console.log("script.js loaded");
 
-const BASE_URL = "https://immigration-crm-website-production.up.railway.app";
+const BASE_URL = "https://immigration-crm-website.onrender.com";
 /* MOBILE MENU */
 function toggleMenu() {
     const nav = document.getElementById("navLinks");
