@@ -943,21 +943,7 @@ button {
 }
 
 /* MEDIA + TESTIMONIAL + FAQ */
-.media-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
-}
 
-.media-grid div {
-  text-align: center;
-  padding: 24px;
-  border-radius: 20px;
-  background: var(--glass);
-  border: 1px solid var(--border);
-  font-weight: 800;
-  color: #fff;
-}
 
 .testimonial-grid {
   display: grid;
@@ -2023,5 +2009,56 @@ html{
             transform-origin: top left;
             width: 111.11%;
         }
+    }
+}
+
+.media-section {
+    background: #0f172a;
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.media-section .mini-title {
+    color: #f4b400;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.media-section .section-title {
+    color: #fff;
+    margin-bottom: 40px;
+}
+
+.media-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.media-grid img {
+    width: 170px;
+    height: 90px;
+    object-fit: contain;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+.media-grid img:hover {
+    transform: translateY(-5px);
+}
+
+@media (max-width:768px){
+    .media-grid{
+        gap:20px;
+    }
+
+    .media-grid img{
+        width:130px;
+        height:70px;
     }
 }
